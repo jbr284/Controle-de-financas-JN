@@ -841,19 +841,16 @@ const firebaseConfig = {
         }
 
         function formatCurrency(value) {
-            return value.toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
         function getDaysInMonth(year, month) {
             return new Date(year, month + 1, 0).getDate();
         }
 
-        function updateDateTime() {
+function updateDateTime() {
             const now = new Date();
-            currentDateTimeSpan.textContent = now.toLocaleString('pt-PT', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-                hour: '2-digit', minute: '2-digit', second: '2-digit'
-            });
+            currentDateTimeSpan.textContent = now.toLocaleString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
         function populateDaySelect() {
