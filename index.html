@@ -1467,7 +1467,8 @@ const firebaseConfig = {
         // --- PWA Service Worker Registration ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(registration => {
+                // CAMINHO CORRIGIDO
+                navigator.serviceWorker.register('/Controle-de-financas-JN/sw.js').then(registration => {
                     console.log('ServiceWorker registado com sucesso: ', registration.scope);
                 }, err => {
                     console.log('Falha ao registar o ServiceWorker: ', err);
