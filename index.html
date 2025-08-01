@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- PWA - Meta Tags -->
     <meta name="theme-color" content="#e91e63"/>
     <link rel="manifest" href="/Controle-de-financas-JN/manifest.json"> 
     <link rel="apple-touch-icon" href="/Controle-de-financas-JN/icon-192x192.png">
 
-    <title>Controlo Financeiro (v7.0 - PWA)</title>
+    <title>Controlo Financeiro (v8.1 - Consolidado)</title>
+    
     <style>
         /* Estilos gerais do corpo da página */
         body {
@@ -129,18 +129,15 @@
             border-bottom: 1px solid #eee;
             gap: 15px;
         }
-        
         #user-info, #sync-buttons {
             display: flex;
             align-items: center;
             gap: 10px;
             flex-wrap: wrap;
         }
-
         #user-info span {
             font-weight: bold;
         }
-
         #user-info button, #sync-buttons button {
             background-color: #2196F3;
             color: white;
@@ -160,7 +157,6 @@
         #user-info button:hover, #sync-buttons button:hover {
             opacity: 0.85;
         }
-        
         #records-header div {
             margin-right: 20px;
             margin-bottom: 10px;
@@ -185,12 +181,26 @@
             cursor: pointer;
         }
 
+        /* Layout de duas colunas para formulário e resumo */
+        .main-content-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            margin-bottom: 35px;
+        }
+        .main-content-layout .form-section {
+            flex: 2; 
+            margin-bottom: 0;
+        }
+        .main-content-layout .summary-card {
+            flex: 1;
+        }
+
         /* Estilos da secção de formulário */
         .form-section {
             background-color: #fdf3f5;
             padding: 25px;
             border-radius: 10px;
-            margin-bottom: 35px;
             border: 1px solid #fce4ec;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
@@ -246,7 +256,6 @@
             color: #333;
             cursor: pointer;
         }
-
         button.add-record {
             background-color: #4CAF50;
             color: white;
@@ -270,13 +279,66 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
+        /* Estilos do Cartão de Resumo */
+        .summary-card {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9e9e9;
+        }
+        .summary-card__title {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+        .summary-card__item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 1em;
+        }
+        .summary-card__item.main-balance {
+            padding-bottom: 20px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .summary-card__item.main-balance .summary-card__label {
+            font-size: 1.1em;
+            color: #555;
+        }
+        .summary-card__item.main-balance .summary-card__value {
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        .summary-card__label {
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .summary-card__value {
+            font-weight: 500;
+            color: #333;
+        }
+        .positive-value {
+            color: #28a745 !important;
+        }
+        .negative-value {
+            color: #dc3545 !important;
+        }
+
         /* --- ESTILOS DA TABELA CORRIGIDOS --- */
         .table-container {
-            overflow-x: auto; /* Adiciona scroll horizontal em ecrãs pequenos */
+            overflow-x: auto;
         }
         table {
             width: 100%;
-            min-width: 900px; /* Largura mínima para evitar quebra excessiva */
+            min-width: 900px;
             border-collapse: collapse;
             margin-top: 35px;
             background-color: #ffffff;
@@ -290,8 +352,8 @@
             padding: 14px 12px;
             text-align: left;
             vertical-align: middle;
-            overflow-wrap: break-word; /* Propriedade moderna para quebra de texto */
-            word-wrap: break-word;     /* Fallback */
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
         table th {
             background-color: #e91e63;
@@ -300,28 +362,23 @@
             font-size: 1em;
             text-transform: uppercase;
         }
-        
-        /* Larguras das colunas reequilibradas */
-        table th:nth-child(1) { width: 9%; }  /* Data */
-        table th:nth-child(2) { width: 23%; } /* Descrição */
-        table th:nth-child(3) { width: 14%; } /* Categoria */
-        table th:nth-child(4) { width: 9%; }  /* Receita */
-        table th:nth-child(5) { width: 9%; }  /* Débito */
-        table th:nth-child(6) { width: 15%; } /* Status */
-        table th:nth-child(7) { width: 11%; } /* Saldo */
-        table th:nth-child(8) { width: 10%; } /* Ação */
-
+        table th:nth-child(1) { width: 9%; }
+        table th:nth-child(2) { width: 23%; }
+        table th:nth-child(3) { width: 14%; }
+        table th:nth-child(4) { width: 9%; }
+        table th:nth-child(5) { width: 9%; }
+        table th:nth-child(6) { width: 15%; }
+        table th:nth-child(7) { width: 11%; }
+        table th:nth-child(8) { width: 10%; }
         table tr:nth-child(even) {
             background-color: #fcf4f6;
         }
         table tr:hover {
             background-color: #f5e7eb;
         }
-        
-        /* Layout dos botões de ação corrigido */
         .action-buttons {
             display: flex;
-            flex-wrap: wrap; /* Permite que os botões quebrem para a linha de baixo */
+            flex-wrap: wrap;
             gap: 5px;
             justify-content: flex-start;
             align-items: center;
@@ -336,7 +393,7 @@
             font-size: 0.85em;
             transition: background-color 0.3s ease, transform 0.2s ease;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            flex-grow: 1; /* Faz os botões ocuparem o espaço disponível */
+            flex-grow: 1;
             text-align: center;
         }
         .action-buttons button.delete {
@@ -352,7 +409,6 @@
         .action-buttons button:active {
             transform: translateY(0);
         }
-        
         tfoot td {
             font-weight: bold;
             background-color: #d81b60;
@@ -367,13 +423,11 @@
         .hidden {
             display: none !important;
         }
-
-        /* Estilos para cores de texto de valores */
         .revenue-value { color: #28a745; font-weight: bold; }
         .debit-value { color: #dc3545; font-weight: bold; }
         .balance-positive { color: #007bff; font-weight: bold; }
         .balance-negative { color: #ffc107; font-weight: bold; }
-        
+
         /* ESTILOS DO MODAL */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -451,60 +505,84 @@
                 </div>
             </div>
 
-            <div class="form-section">
-                <h2>Registar Nova Transação</h2>
-                <div class="form-group">
-                    <label for="day-select">Dia do Registo:</label>
-                    <select id="day-select"></select>
-                </div>
-                <div class="form-group">
-                    <label>Tipo de Registo:</label>
-                    <div class="radio-options">
-                        <input type="radio" id="type-revenue" name="record-type" value="Receita" checked>
-                        <label for="type-revenue">Receita</label>
-                        <input type="radio" id="type-debit" name="record-type" value="Débito">
-                        <label for="type-debit">Débito</label>
-                    </div>
-                </div>
-
-                <div id="debit-options" class="hidden">
+            <div class="main-content-layout">
+                <div class="form-section">
+                    <h2>Registar Nova Transação</h2>
                     <div class="form-group">
-                        <label for="debit-type">Opção de Débito:</label>
-                        <select id="debit-type">
-                            <option value="à vista">À vista</option>
-                            <option value="a prazo">A prazo</option>
-                            <option value="parcelado">Parcelado</option>
-                        </select>
+                        <label for="day-select">Dia do Registo:</label>
+                        <select id="day-select"></select>
                     </div>
-                    <div id="debit-aprazo-fields" class="hidden form-group">
-                        <label for="debit-due-day-aprazo">Dia do Débito:</label>
-                        <select id="debit-due-day-aprazo"></select>
-                    </div>
-                    <div id="debit-parcelado-fields" class="hidden">
-                        <div class="form-group">
-                            <label for="num-installments">Nº de Parcelas:</label>
-                            <input type="number" id="num-installments" min="1" value="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="debit-due-day-parcelado">Dia do Débito (Parcela):</label>
-                            <select id="debit-due-day-parcelado"></select>
+                    <div class="form-group">
+                        <label>Tipo de Registo:</label>
+                        <div class="radio-options">
+                            <input type="radio" id="type-revenue" name="record-type" value="Receita" checked>
+                            <label for="type-revenue">Receita</label>
+                            <input type="radio" id="type-debit" name="record-type" value="Débito">
+                            <label for="type-debit">Débito</label>
                         </div>
                     </div>
+                    <div id="debit-options" class="hidden">
+                        <div class="form-group">
+                            <label for="debit-type">Opção de Débito:</label>
+                            <select id="debit-type">
+                                <option value="à vista">À vista</option>
+                                <option value="a prazo">A prazo</option>
+                                <option value="parcelado">Parcelado</option>
+                            </select>
+                        </div>
+                        <div id="debit-aprazo-fields" class="hidden form-group">
+                            <label for="debit-due-day-aprazo">Dia do Débito:</label>
+                            <select id="debit-due-day-aprazo"></select>
+                        </div>
+                        <div id="debit-parcelado-fields" class="hidden">
+                            <div class="form-group">
+                                <label for="num-installments">Nº de Parcelas:</label>
+                                <input type="number" id="num-installments" min="1" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="debit-due-day-parcelado">Dia do Débito (Parcela):</label>
+                                <select id="debit-due-day-parcelado"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Descrição:</label>
+                        <input type="text" id="description" placeholder="Ex: Salário, Aluguer">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Categoria:</label>
+                        <input type="text" id="category" placeholder="Ex: Casa, Alimentação">
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Valor Monetário:</label>
+                        <input type="number" id="amount" step="0.01" min="0">
+                    </div>
+                    <button class="add-record" id="add-record-button">Adicionar Registo</button>
                 </div>
-
-                <div class="form-group">
-                    <label for="description">Descrição:</label>
-                    <input type="text" id="description" placeholder="Ex: Salário, Aluguer">
+                
+                <div class="summary-card">
+                    <h2 class="summary-card__title">Resumo do Mês</h2>
+                    <div class="summary-card__item main-balance">
+                        <span class="summary-card__label">Saldo Atual</span>
+                        <span class="summary-card__value" id="summary-balance">R$ 0,00</span>
+                    </div>
+                    <div class="summary-card__details">
+                        <div class="summary-card__item">
+                            <span class="summary-card__label">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/></svg>
+                                Total de Receitas
+                            </span>
+                            <span class="summary-card__value positive-value" id="summary-revenue">R$ 0,00</span>
+                        </div>
+                        <div class="summary-card__item">
+                            <span class="summary-card__label">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-circle" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z"/></svg>
+                                Total de Despesas
+                            </span>
+                            <span class="summary-card__value negative-value" id="summary-expenses">R$ 0,00</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="category">Categoria:</label>
-                    <input type="text" id="category" placeholder="Ex: Casa, Alimentação">
-                </div>
-                <div class="form-group">
-                    <label for="amount">Valor Monetário:</label>
-                    <input type="number" id="amount" step="0.01" min="0">
-                </div>
-                <button class="add-record" id="add-record-button">Adicionar Registo</button>
             </div>
 
             <h2>Registos Financeiros</h2>
@@ -512,18 +590,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Data</th>
-                            <th>Descrição</th>
-                            <th>Categoria</th>
-                            <th>Receita (R$)</th>
-                            <th>Débito (R$)</th>
-                            <th>Status</th>
-                            <th>Saldo (R$)</th>
-                            <th>Ação</th>
+                            <th>Data</th><th>Descrição</th><th>Categoria</th><th>Receita (R$)</th><th>Débito (R$)</th><th>Status</th><th>Saldo (R$)</th><th>Ação</th>
                         </tr>
                     </thead>
-                    <tbody id="records-table-body">
-                        </tbody>
+                    <tbody id="records-table-body"></tbody>
                     <tfoot>
                         <tr>
                             <td colspan="3">Total do Mês:</td>
@@ -541,9 +611,7 @@
 
     <div id="modal" class="modal-overlay">
         <div class="modal-container">
-            <div class="modal-header">
-                <h2 id="modal-title"></h2>
-            </div>
+            <div class="modal-header"><h2 id="modal-title"></h2></div>
             <div id="modal-body" class="modal-body"></div>
             <div id="modal-footer" class="modal-footer"></div>
         </div>
@@ -573,15 +641,14 @@
         // =================================================================================
         //  PASSO 1: CONFIGURAÇÃO DO FIREBASE
         // =================================================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyB6NHzJc6MlK222u0qoiL7BEK9QHEY1Gjk",
-  authDomain: "controle-financeiro-jn.firebaseapp.com",
-  projectId: "controle-financeiro-jn",
-  storageBucket: "controle-financeiro-jn.firebasestorage.app",
-  messagingSenderId: "463845176681",
-  appId: "1:463845176681:web:cf2a2461e264176a8af9f8"
-};
-
+        const firebaseConfig = {
+          apiKey: "AIzaSyB6NHzJc6MlK222u0qoiL7BEK9QHEY1Gjk",
+          authDomain: "controle-financeiro-jn.firebaseapp.com",
+          projectId: "controle-financeiro-jn",
+          storageBucket: "controle-financeiro-jn.firebasestorage.app",
+          messagingSenderId: "463845176681",
+          appId: "1:463845176681:web:cf2a2461e264176a8af9f8"
+        };
 
         // Inicializar o Firebase e os seus serviços
         const app = initializeApp(firebaseConfig);
@@ -591,11 +658,9 @@ const firebaseConfig = {
         // --- Variável global para guardar o ID do utilizador logado ---
         let currentUserId = null;
 
-        // =================================================================================
-        //  LÓGICA DE AUTENTICAÇÃO E SINCRONIZAÇÃO
-        // =================================================================================
-
-        // --- Referências aos novos elementos do DOM ---
+        // --- Referências aos elementos do DOM ---
+        const loginScreen = document.getElementById('login-screen');
+        const recordsScreen = document.getElementById('records-screen');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const loginButton = document.getElementById('login-button');
@@ -605,9 +670,38 @@ const firebaseConfig = {
         const loadDataButton = document.getElementById('load-data-button');
         const userEmailSpan = document.getElementById('user-email');
         const loginError = document.getElementById('login-error');
+        const currentDateTimeSpan = document.getElementById('current-date-time');
+        const monthSelect = document.getElementById('month-select');
+        const yearSelect = document.getElementById('year-select');
+        const daySelect = document.getElementById('day-select');
+        const typeRevenueRadio = document.getElementById('type-revenue');
+        const typeDebitRadio = document.getElementById('type-debit');
+        const debitOptionsDiv = document.getElementById('debit-options');
+        const debitTypeSelect = document.getElementById('debit-type');
+        const debitAPrazoFields = document.getElementById('debit-aprazo-fields');
+        const debitDueDayAPrazoSelect = document.getElementById('debit-due-day-aprazo');
+        const debitParceladoFields = document.getElementById('debit-parcelado-fields');
+        const numInstallmentsInput = document.getElementById('num-installments');
+        const debitDueDayParceladoSelect = document.getElementById('debit-due-day-parcelado');
+        const descriptionInput = document.getElementById('description');
+        const categoryInput = document.getElementById('category');
+        const amountInput = document.getElementById('amount');
+        const addRecordButton = document.getElementById('add-record-button');
+        const recordsTableBody = document.getElementById('records-table-body');
+        const totalRevenueTd = document.getElementById('total-revenue');
+        const totalDebitTd = document.getElementById('total-debit');
+        const finalBalanceTd = document.getElementById('final-balance');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalFooter = document.getElementById('modal-footer');
 
-        // --- Funções de Autenticação ---
-        
+        let currentMonth;
+        let currentYear;
+
+        // =================================================================================
+        //  LÓGICA DE AUTENTICAÇÃO E SINCRONIZAÇÃO
+        // =================================================================================
         async function handleRegister() {
             const email = emailInput.value.trim().toLowerCase();
             const password = passwordInput.value;
@@ -680,30 +774,21 @@ const firebaseConfig = {
 
         function getFriendlyAuthError(errorCode) {
             switch (errorCode) {
-                case 'auth/invalid-email':
-                    return 'O formato do email é inválido.';
+                case 'auth/invalid-email': return 'O formato do email é inválido.';
                 case 'auth/user-not-found':
-                case 'auth/wrong-password':
-                    return 'Email ou senha incorretos.';
-                case 'auth/email-already-in-use':
-                    return 'Este email já está registado.';
-                case 'auth/weak-password':
-                    return 'A senha precisa de ter no mínimo 6 caracteres.';
-                default:
-                    return 'Ocorreu um erro. Tente novamente.';
+                case 'auth/wrong-password': return 'Email ou senha incorretos.';
+                case 'auth/email-already-in-use': return 'Este email já está registado.';
+                case 'auth/weak-password': return 'A senha precisa de ter no mínimo 6 caracteres.';
+                default: return 'Ocorreu um erro. Tente novamente.';
             }
         }
-
-        // --- Funções de Sincronização com Firestore ---
 
         async function saveDataToFirestore() {
             if (!currentUserId) {
                 showModal('Erro', 'Precisa de ter a sessão iniciada para guardar os dados.', [{ text: 'OK', class: 'danger' }]);
                 return;
             }
-
             showModal('A guardar...', 'Aguarde enquanto os seus dados são guardados na nuvem.', [], { closeOnClick: false });
-
             const allData = {};
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
@@ -711,7 +796,6 @@ const firebaseConfig = {
                     allData[key] = localStorage.getItem(key);
                 }
             }
-
             try {
                 const userDocRef = doc(db, "userFinances", currentUserId);
                 await setDoc(userDocRef, { financialData: allData });
@@ -729,13 +813,10 @@ const firebaseConfig = {
                 showModal('Erro', 'Precisa de ter a sessão iniciada para carregar os dados.', [{ text: 'OK', class: 'danger' }]);
                 return;
             }
-
             showModal('A carregar...', 'A buscar os seus dados na nuvem. Aguarde...', [], { closeOnClick: false });
-
             try {
                 const userDocRef = doc(db, "userFinances", currentUserId);
                 const docSnap = await getDoc(userDocRef);
-
                 if (docSnap.exists()) {
                     const dataFromCloud = docSnap.data().financialData;
                     localStorage.clear();
@@ -755,7 +836,6 @@ const firebaseConfig = {
             }
         }
 
-        // --- Observador de Estado de Autenticação ---
         onAuthStateChanged(auth, (user) => {
             hideLoginError();
             if (user) {
@@ -772,39 +852,8 @@ const firebaseConfig = {
         });
 
         // =================================================================================
-        //  O SEU CÓDIGO ORIGINAL (QUASE INTACTO)
+        //  LÓGICA PRINCIPAL DA APLICAÇÃO
         // =================================================================================
-
-        const loginScreen = document.getElementById('login-screen');
-        const recordsScreen = document.getElementById('records-screen');
-        const currentDateTimeSpan = document.getElementById('current-date-time');
-        const monthSelect = document.getElementById('month-select');
-        const yearSelect = document.getElementById('year-select');
-        const daySelect = document.getElementById('day-select');
-        const typeRevenueRadio = document.getElementById('type-revenue');
-        const typeDebitRadio = document.getElementById('type-debit');
-        const debitOptionsDiv = document.getElementById('debit-options');
-        const debitTypeSelect = document.getElementById('debit-type');
-        const debitAPrazoFields = document.getElementById('debit-aprazo-fields');
-        const debitDueDayAPrazoSelect = document.getElementById('debit-due-day-aprazo');
-        const debitParceladoFields = document.getElementById('debit-parcelado-fields');
-        const numInstallmentsInput = document.getElementById('num-installments');
-        const debitDueDayParceladoSelect = document.getElementById('debit-due-day-parcelado');
-        const descriptionInput = document.getElementById('description');
-        const categoryInput = document.getElementById('category');
-        const amountInput = document.getElementById('amount');
-        const addRecordButton = document.getElementById('add-record-button');
-        const recordsTableBody = document.getElementById('records-table-body');
-        const totalRevenueTd = document.getElementById('total-revenue');
-        const totalDebitTd = document.getElementById('total-debit');
-        const finalBalanceTd = document.getElementById('final-balance');
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalBody = document.getElementById('modal-body');
-        const modalFooter = document.getElementById('modal-footer');
-
-        let currentMonth;
-        let currentYear;
 
         function closeModal() {
             modal.classList.remove('active');
@@ -812,14 +861,12 @@ const firebaseConfig = {
 
         function showModal(title, bodyContent, buttons = [], options = {}) {
             modalTitle.textContent = title;
-            
             modalBody.innerHTML = '';
             if (typeof bodyContent === 'string') {
                 modalBody.textContent = bodyContent;
             } else if (bodyContent instanceof HTMLElement) {
                 modalBody.appendChild(bodyContent);
             }
-
             modalFooter.innerHTML = '';
             buttons.forEach(btnInfo => {
                 const button = document.createElement('button');
@@ -836,7 +883,6 @@ const firebaseConfig = {
                 };
                 modalFooter.appendChild(button);
             });
-            
             modal.classList.add('active');
         }
 
@@ -848,7 +894,7 @@ const firebaseConfig = {
             return new Date(year, month + 1, 0).getDate();
         }
 
-function updateDateTime() {
+        function updateDateTime() {
             const now = new Date();
             currentDateTimeSpan.textContent = now.toLocaleString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
@@ -874,33 +920,23 @@ function updateDateTime() {
             const today = new Date();
             currentMonth = today.getMonth();
             currentYear = today.getFullYear();
-
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
             monthSelect.innerHTML = '';
-            const monthNames = [
-                'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-            ];
             monthNames.forEach((name, index) => {
                 const option = document.createElement('option');
                 option.value = index;
                 option.textContent = name;
-                if (index === currentMonth) {
-                    option.selected = true;
-                }
+                if (index === currentMonth) option.selected = true;
                 monthSelect.appendChild(option);
             });
-
             yearSelect.innerHTML = '';
             for (let i = currentYear - 5; i <= currentYear + 5; i++) {
                 const option = document.createElement('option');
                 option.value = i;
                 option.textContent = i;
-                if (i === currentYear) {
-                    option.selected = true;
-                }
+                if (i === currentYear) option.selected = true;
                 yearSelect.appendChild(option);
             }
-
             populateDaySelect();
             populateDebitDueDaySelects();
         }
@@ -911,13 +947,10 @@ function updateDateTime() {
             debitDueDayParceladoSelect.innerHTML = '';
             for (let i = 1; i <= daysInMonth; i++) {
                 const option1 = document.createElement('option');
-                option1.value = i;
-                option1.textContent = i;
+                option1.value = i; option1.textContent = i;
                 debitDueDayAPrazoSelect.appendChild(option1);
-
                 const option2 = document.createElement('option');
-                option2.value = i;
-                option2.textContent = i;
+                option2.value = i; option2.textContent = i;
                 debitDueDayParceladoSelect.appendChild(option2);
             }
             const today = new Date();
@@ -956,14 +989,44 @@ function updateDateTime() {
             localStorage.setItem(key, JSON.stringify(records));
         }
 
-        function renderRecords() {
-            const records = getRecords().sort((a, b) => {
-                const dateA = new Date(currentYear, currentMonth, a.day);
-                const dateB = new Date(currentYear, currentMonth, b.day);
-                return dateA - dateB;
-            });
-            recordsTableBody.innerHTML = '';
+        /**
+         * Calcula os totais e atualiza o card de resumo.
+         * @param {Array} records - A lista de registros financeiros do mês.
+         */
+        function updateSummaryCard(records) {
+            const summaryBalanceEl = document.getElementById('summary-balance');
+            const summaryRevenueEl = document.getElementById('summary-revenue');
+            const summaryExpensesEl = document.getElementById('summary-expenses');
 
+            let totalRevenue = 0;
+            let totalExpenses = 0;
+
+            records.forEach(record => {
+                if (record.type === 'Receita') {
+                    totalRevenue += record.amount;
+                } else if (record.type === 'Débito') {
+                    const expenseValue = record.debitType === 'parcelado' ? record.installmentValue : record.amount;
+                    totalExpenses += expenseValue;
+                }
+            });
+
+            const balance = totalRevenue - totalExpenses;
+
+            summaryRevenueEl.textContent = formatCurrency(totalRevenue);
+            summaryExpensesEl.textContent = formatCurrency(totalExpenses);
+            summaryBalanceEl.textContent = formatCurrency(balance);
+
+            summaryBalanceEl.classList.remove('positive-value', 'negative-value');
+            if (balance >= 0) {
+                summaryBalanceEl.classList.add('positive-value');
+            } else {
+                summaryBalanceEl.classList.add('negative-value');
+            }
+        }
+
+        function renderRecords() {
+            const records = getRecords().sort((a, b) => new Date(currentYear, currentMonth, a.day) - new Date(currentYear, currentMonth, b.day));
+            recordsTableBody.innerHTML = '';
             let currentBalance = 0;
             let totalRevenue = 0;
             let totalDebit = 0;
@@ -980,9 +1043,9 @@ function updateDateTime() {
 
                 const row = recordsTableBody.insertRow();
                 row.dataset.id = record.id;
-
                 const displayDay = (record.type === 'Débito' && record.scheduledDay) ? record.scheduledDay : record.day;
-                const date =  new Date(currentYear, currentMonth, displayDay).toLocaleDateString('pt-BR');
+                
+                const date = new Date(currentYear, currentMonth, displayDay).toLocaleDateString('pt-BR');
                 row.insertCell().textContent = date;
 
                 row.insertCell().textContent = record.description;
@@ -997,33 +1060,26 @@ function updateDateTime() {
                 }
 
                 const debitCell = row.insertCell();
-                let debitAmountDisplay = '';
                 if (record.type === 'Débito') {
-                    debitAmountDisplay = (record.debitType === 'parcelado' ? formatCurrency(record.installmentValue) : formatCurrency(record.amount));
+                    const debitAmountDisplay = (record.debitType === 'parcelado' ? formatCurrency(record.installmentValue) : formatCurrency(record.amount));
+                    debitCell.textContent = debitAmountDisplay;
                     debitCell.classList.add('debit-value');
+                } else {
+                    debitCell.textContent = '';
                 }
-                debitCell.textContent = debitAmountDisplay;
 
                 const statusCell = row.insertCell();
-                let statusText = '';
                 if (record.type === 'Receita') {
-                    statusText = 'Crédito OK';
-                    statusCell.textContent = statusText;
+                    statusCell.textContent = 'Crédito OK';
                 } else if (record.type === 'Débito') {
                     const scheduledDate = new Date(record.year || currentYear, record.month || currentMonth, record.scheduledDay || record.day);
                     const formattedDueDate = scheduledDate.toLocaleDateString('pt-BR');
-
                     if (record.debitType === 'à vista') {
-                        statusText = 'Pagamento realizado';
-                        statusCell.textContent = statusText;
+                        statusCell.textContent = 'Pagamento realizado';
                     } else if (record.debitType === 'a prazo') {
-                        statusText = `Débito agendado para ${formattedDueDate}`;
-                        statusCell.textContent = statusText;
+                        statusCell.textContent = `Débito agendado para ${formattedDueDate}`;
                     } else if (record.debitType === 'parcelado') {
-                        statusText = `Total da Compra: ${formatCurrency(record.amount)}<br>
-                                      Vencimento: ${formattedDueDate}<br>
-                                      Parcela: ${record.currentInstallment} / ${record.installmentsCount}`;
-                        statusCell.innerHTML = statusText;
+                        statusCell.innerHTML = `Total da Compra: ${formatCurrency(record.amount)}<br>Vencimento: ${formattedDueDate}<br>Parcela: ${record.currentInstallment} / ${record.installmentsCount}`;
                     }
                 }
                 
@@ -1041,12 +1097,10 @@ function updateDateTime() {
                 
                 const actionCell = row.insertCell();
                 actionCell.classList.add('action-buttons');
-                
                 const editButton = document.createElement('button');
                 editButton.textContent = 'Editar';
                 editButton.onclick = () => editRecord(record.id);
                 actionCell.appendChild(editButton);
-
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Excluir';
                 deleteButton.classList.add('delete');
@@ -1060,6 +1114,8 @@ function updateDateTime() {
             finalBalanceTd.textContent = formatCurrency(finalMonthBalance);
             finalBalanceTd.classList.remove('balance-positive', 'balance-negative');
             finalBalanceTd.classList.add(finalMonthBalance >= 0 ? 'balance-positive' : 'balance-negative');
+            
+            updateSummaryCard(records);
         }
 
         function addRecord() {
@@ -1074,19 +1130,9 @@ function updateDateTime() {
             const amount = parseFloat(amountInput.value);
 
             let isValid = true;
-
-            if (!description) {
-                descriptionInput.classList.add('invalid-field');
-                isValid = false;
-            }
-            if (!category) {
-                categoryInput.classList.add('invalid-field');
-                isValid = false;
-            }
-            if (isNaN(amount) || amount <= 0) {
-                amountInput.classList.add('invalid-field');
-                isValid = false;
-            }
+            if (!description) { descriptionInput.classList.add('invalid-field'); isValid = false; }
+            if (!category) { categoryInput.classList.add('invalid-field'); isValid = false; }
+            if (isNaN(amount) || amount <= 0) { amountInput.classList.add('invalid-field'); isValid = false; }
 
             if (!isValid) {
                 showModal('Erro de Validação', 'Por favor, preencha todos os campos destacados.', [{ text: 'OK', class: 'primary' }]);
@@ -1096,40 +1142,26 @@ function updateDateTime() {
             if (type === 'Receita' || debitTypeSelect.value === 'à vista' || debitTypeSelect.value === 'a prazo') {
                 let currentRecords = getRecords();
                 if (type === 'Receita') {
-                    currentRecords.push({
-                        id: Date.now(), day, type, description, category, amount
-                    });
+                    currentRecords.push({ id: Date.now(), day, type, description, category, amount });
                 } else {
                     const debitType = debitTypeSelect.value;
                     if (debitType === 'à vista') {
-                        currentRecords.push({
-                            id: Date.now(), day, type, debitType, description, category, amount
-                        });
+                        currentRecords.push({ id: Date.now(), day, type, debitType, description, category, amount });
                     } else if (debitType === 'a prazo') {
                         const scheduledDay = parseInt(debitDueDayAPrazoSelect.value);
-                        currentRecords.push({
-                            id: Date.now(), day, type, debitType, description, category, amount,
-                            scheduledDay, scheduledMonth: currentMonth, scheduledYear: currentYear, isPaid: false
-                        });
+                        currentRecords.push({ id: Date.now(), day, type, debitType, description, category, amount, scheduledDay, scheduledMonth: currentMonth, scheduledYear: currentYear, isPaid: false });
                     }
                 }
                 saveRecords(currentRecords);
             } else if (type === 'Débito' && debitTypeSelect.value === 'parcelado') {
                 const numInstallments = parseInt(numInstallmentsInput.value);
                 const debitDueDay = parseInt(debitDueDayParceladoSelect.value);
-
-                if (isNaN(numInstallments) || numInstallments <= 0) {
-                    showModal('Erro de Validação', 'Número de parcelas inválido.', [{ text: 'OK', class: 'primary' }]);
+                if (isNaN(numInstallments) || numInstallments <= 0 || numInstallments > 60) {
+                    showModal('Erro de Validação', 'Número de parcelas inválido (mín: 1, máx: 60).', [{ text: 'OK', class: 'primary' }]);
                     return;
                 }
-                if (numInstallments > 60) {
-                    showModal('Erro de Validação', 'O número máximo de parcelas é 60.', [{ text: 'OK', class: 'primary' }]);
-                    return;
-                }
-
                 const installmentValue = amount / numInstallments;
                 const transactionGroupId = Date.now();
-
                 for (let i = 0; i < numInstallments; i++) {
                     let installmentMonth = currentMonth + i;
                     let installmentYear = currentYear;
@@ -1148,7 +1180,6 @@ function updateDateTime() {
                     saveRecordsForMonth(targetMonthRecords, installmentYear, installmentMonth);
                 }
             }
-            
             renderRecords();
             clearForm();
         }
@@ -1156,33 +1187,20 @@ function updateDateTime() {
         function editRecord(id) {
             const records = getRecords();
             const recordToEdit = records.find(record => record.id === id);
-
             if (!recordToEdit) {
                 showModal('Erro', 'Registo não encontrado para edição.', [{ text: 'OK', class: 'primary' }]);
                 return;
             }
-
             if (recordToEdit.debitType === 'parcelado') {
-                showModal(
-                    'Aviso sobre Edição',
-                    'A edição de transações parceladas não é permitida. Exclua todas as parcelas e registe novamente.',
-                    [
-                        { 
-                            text: 'Excluir Todas as Parcelas', 
-                            class: 'danger', 
-                            onClick: () => deleteAllInstallments(recordToEdit.transactionGroupId, recordToEdit.currentInstallment) 
-                        },
-                        { text: 'Cancelar', class: 'secondary' }
-                    ]
+                showModal('Aviso sobre Edição', 'A edição de transações parceladas não é permitida. Exclua todas as parcelas e registe novamente.',
+                    [{ text: 'Excluir Todas as Parcelas', class: 'danger', onClick: () => deleteAllInstallments(recordToEdit.transactionGroupId, recordToEdit.currentInstallment) }, { text: 'Cancelar', class: 'secondary' }]
                 );
                 return;
             }
-
             daySelect.value = recordToEdit.day;
             descriptionInput.value = recordToEdit.description;
             categoryInput.value = recordToEdit.category;
             amountInput.value = recordToEdit.amount;
-
             if (recordToEdit.type === 'Receita') {
                 typeRevenueRadio.checked = true;
                 debitOptionsDiv.classList.add('hidden');
@@ -1191,12 +1209,10 @@ function updateDateTime() {
                 debitOptionsDiv.classList.remove('hidden');
                 debitTypeSelect.value = recordToEdit.debitType;
                 toggleDebitFields();
-
                 if (recordToEdit.debitType === 'a prazo') {
                     debitDueDayAPrazoSelect.value = recordToEdit.scheduledDay;
                 }
             }
-
             addRecordButton.textContent = 'Atualizar Registo';
             addRecordButton.onclick = () => updateRecord(id);
         }
@@ -1204,35 +1220,25 @@ function updateDateTime() {
         function updateRecord(id) {
             let records = getRecords();
             const recordIndex = records.findIndex(record => record.id === id);
-
             if (recordIndex === -1) {
                 showModal('Erro', 'Registo não encontrado para atualização.', [{ text: 'OK', class: 'primary' }]);
                 return;
             }
-
             const day = parseInt(daySelect.value);
             const type = typeRevenueRadio.checked ? 'Receita' : 'Débito';
             const description = descriptionInput.value.trim();
             const category = categoryInput.value.trim();
             const amount = parseFloat(amountInput.value);
-
             if (!day || !description || !category || isNaN(amount) || amount <= 0) {
                 showModal('Erro de Validação', 'Preencha todos os campos.', [{ text: 'OK', class: 'primary' }]);
                 return;
             }
-
-            let updatedRecord = {
-                ...records[recordIndex],
-                day, type, description, category, amount
-            };
-
+            let updatedRecord = { ...records[recordIndex], day, type, description, category, amount };
             if (type === 'Débito') {
                 const debitType = debitTypeSelect.value;
                 updatedRecord.debitType = debitType;
-
                 if (debitType === 'à vista') {
-                    delete updatedRecord.scheduledDay; delete updatedRecord.scheduledMonth;
-                    delete updatedRecord.scheduledYear; delete updatedRecord.isPaid;
+                    delete updatedRecord.scheduledDay; delete updatedRecord.scheduledMonth; delete updatedRecord.scheduledYear; delete updatedRecord.isPaid;
                 } else if (debitType === 'a prazo') {
                     updatedRecord.scheduledDay = parseInt(debitDueDayAPrazoSelect.value);
                     updatedRecord.scheduledMonth = currentMonth; 
@@ -1240,11 +1246,8 @@ function updateDateTime() {
                     updatedRecord.isPaid = false;
                 }
             } else {
-                delete updatedRecord.debitType; delete updatedRecord.scheduledDay;
-                delete updatedRecord.scheduledMonth; delete updatedRecord.scheduledYear;
-                delete updatedRecord.isPaid;
+                delete updatedRecord.debitType; delete updatedRecord.scheduledDay; delete updatedRecord.scheduledMonth; delete updatedRecord.scheduledYear; delete updatedRecord.isPaid;
             }
-
             records[recordIndex] = updatedRecord;
             saveRecords(records); 
             renderRecords(); 
@@ -1256,67 +1259,39 @@ function updateDateTime() {
         function deleteRecord(id) {
             const records = getRecords();
             const recordToDelete = records.find(record => record.id === id);
-
             if (!recordToDelete) return;
-
             if (recordToDelete.debitType === 'parcelado' && recordToDelete.transactionGroupId) {
-                showModal(
-                    'Excluir Parcela',
-                    'Esta transação é uma parcela. O que deseja fazer?',
-                    [
-                        { 
-                            text: 'Excluir Apenas Esta Parcela', 
-                            class: 'secondary', 
-                            onClick: () => {
-                                let currentRecords = getRecords().filter(r => r.id !== id);
-                                saveRecords(currentRecords);
-                                renderRecords();
-                            }
-                        },
-                        { 
-                            text: 'Excluir Todas as Futuras', 
-                            class: 'danger', 
-                            onClick: () => deleteAllInstallments(recordToDelete.transactionGroupId, recordToDelete.currentInstallment) 
-                        },
-                        { text: 'Cancelar', class: 'primary' }
-                    ]
+                showModal('Excluir Parcela', 'Esta transação é uma parcela. O que deseja fazer?',
+                    [{ text: 'Excluir Apenas Esta Parcela', class: 'secondary', onClick: () => {
+                        let currentRecords = getRecords().filter(r => r.id !== id);
+                        saveRecords(currentRecords);
+                        renderRecords();
+                    }},
+                    { text: 'Excluir Todas as Futuras', class: 'danger', onClick: () => deleteAllInstallments(recordToDelete.transactionGroupId, recordToDelete.currentInstallment) },
+                    { text: 'Cancelar', class: 'primary' }]
                 );
             } else {
-                showModal(
-                    'Confirmar Exclusão', 
-                    'Tem a certeza de que deseja excluir este registo?',
-                    [
-                         { 
-                            text: 'Excluir', 
-                            class: 'danger', 
-                            onClick: () => {
-                                let currentRecords = getRecords().filter(r => r.id !== id);
-                                saveRecords(currentRecords);
-                                renderRecords();
-                            }
-                        },
-                        { text: 'Cancelar', class: 'secondary' }
-                    ]
+                showModal('Confirmar Exclusão', 'Tem a certeza de que deseja excluir este registo?',
+                    [{ text: 'Excluir', class: 'danger', onClick: () => {
+                        let currentRecords = getRecords().filter(r => r.id !== id);
+                        saveRecords(currentRecords);
+                        renderRecords();
+                    }},
+                    { text: 'Cancelar', class: 'secondary' }]
                 );
             }
         }
-        
+
         function deleteAllInstallments(groupId, startInstallment) {
             let month = currentMonth;
             let year = currentYear;
-
             for (let i = 0; i < 60; i++) {
                 let records = getRecordsForMonth(year, month);
                 const filteredRecords = records.filter(r => r.transactionGroupId !== groupId || r.currentInstallment < startInstallment);
                 saveRecordsForMonth(filteredRecords, year, month);
-
                 month++;
-                if (month > 11) {
-                    month = 0;
-                    year++;
-                }
+                if (month > 11) { month = 0; year++; }
             }
-
             renderRecords();
             showModal('Sucesso', 'Todas as parcelas futuras foram excluídas.', [{text: 'OK', class: 'primary'}]);
         }
@@ -1324,57 +1299,42 @@ function updateDateTime() {
         function showReschedulePrompt(recordId) {
             const records = getRecords();
             const recordToReschedule = records.find(record => record.id === id);
-
             if (!recordToReschedule) {
                 showModal('Erro', 'Registo não encontrado.', [{ text: 'OK', class: 'primary' }]);
                 return;
             }
-            
             const bodyContainer = document.createElement('div');
             bodyContainer.innerHTML = `<p>Reagendar "${recordToReschedule.description}" para que dia do próximo mês?</p>`;
             const input = document.createElement('input');
             input.type = 'number'; input.min = 1; input.max = 31;
             input.placeholder = 'Digite o dia (1-31)';
             bodyContainer.appendChild(input);
-
-            showModal( 'Reagendar Débito', bodyContainer,
-                [
-                    {
-                        text: 'Confirmar',
-                        class: 'primary',
-                        onClick: () => {
-                            const newDay = parseInt(input.value);
-                            if (isNaN(newDay) || newDay < 1 || newDay > 31) {
-                                showModal('Erro', 'Dia inválido.', [{ text: 'OK', class: 'primary' }]);
-                                return;
-                            }
-                            
-                            let nextMonth = currentMonth + 1;
-                            let nextYear = currentYear;
-                            if (nextMonth > 11) { nextMonth = 0; nextYear++; }
-
-                            rescheduleRecord(recordToReschedule, newDay, nextMonth, nextYear);
-                        }
-                    },
-                    { text: 'Cancelar', class: 'secondary' }
-                ]
+            showModal('Reagendar Débito', bodyContainer,
+                [{ text: 'Confirmar', class: 'primary', onClick: () => {
+                    const newDay = parseInt(input.value);
+                    if (isNaN(newDay) || newDay < 1 || newDay > 31) {
+                        showModal('Erro', 'Dia inválido.', [{ text: 'OK', class: 'primary' }]);
+                        return;
+                    }
+                    let nextMonth = currentMonth + 1;
+                    let nextYear = currentYear;
+                    if (nextMonth > 11) { nextMonth = 0; nextYear++; }
+                    rescheduleRecord(recordToReschedule, newDay, nextMonth, nextYear);
+                }}, { text: 'Cancelar', class: 'secondary' }]
             );
         }
 
         function rescheduleRecord(record, newDay, newMonth, newYear) {
             let currentMonthRecords = getRecords().filter(r => r.id !== record.id);
             saveRecords(currentMonthRecords);
-
             const newRecord = { ...record };
             newRecord.id = Date.now();
             newRecord.day = newDay; newRecord.scheduledDay = newDay; 
             newRecord.scheduledMonth = newMonth; newRecord.scheduledYear = newYear;
             newRecord.isPaid = false; 
-
             let targetMonthRecords = getRecordsForMonth(newYear, newMonth);
             targetMonthRecords.push(newRecord); 
             saveRecordsForMonth(targetMonthRecords, newYear, newMonth);
-
             renderRecords(); 
             showModal('Sucesso', `Registo reagendado com sucesso.`, [{ text: 'OK', class: 'primary' }]);
         }
@@ -1386,17 +1346,14 @@ function updateDateTime() {
             } else {
                 daySelect.value = 1;
             }
-
             typeRevenueRadio.checked = true;
             debitOptionsDiv.classList.add('hidden'); 
             debitAPrazoFields.classList.add('hidden');
             debitParceladoFields.classList.add('hidden');
-
             descriptionInput.value = '';
             categoryInput.value = '';
             amountInput.value = '';
             numInstallmentsInput.value = '1';
-
             addRecordButton.textContent = 'Adicionar Registo';
             addRecordButton.onclick = addRecord;
         }
@@ -1405,7 +1362,6 @@ function updateDateTime() {
             const debitType = debitTypeSelect.value;
             debitAPrazoFields.classList.add('hidden');
             debitParceladoFields.classList.add('hidden');
-
             if (debitType === 'a prazo') {
                 debitAPrazoFields.classList.remove('hidden');
             } else if (debitType === 'parcelado') {
@@ -1419,33 +1375,26 @@ function updateDateTime() {
         logoutButton.addEventListener('click', handleLogout);
         saveDataButton.addEventListener('click', saveDataToFirestore);
         loadDataButton.addEventListener('click', loadDataFromFirestore);
-        
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
-
         typeRevenueRadio.addEventListener('change', () => {
             debitOptionsDiv.classList.add('hidden');
             debitAPrazoFields.classList.add('hidden');
             debitParceladoFields.classList.add('hidden');
         });
-
         typeDebitRadio.addEventListener('change', () => {
             debitOptionsDiv.classList.remove('hidden');
             toggleDebitFields();
         });
-
         debitTypeSelect.addEventListener('change', toggleDebitFields);
-
         addRecordButton.onclick = addRecord;
-
         monthSelect.addEventListener('change', () => {
             currentMonth = parseInt(monthSelect.value);
             populateDaySelect();
             populateDebitDueDaySelects();
             renderRecords();
         });
-
         yearSelect.addEventListener('change', () => {
             currentYear = parseInt(yearSelect.value);
             populateDaySelect();
@@ -1459,11 +1408,10 @@ function updateDateTime() {
             renderRecords();
             clearForm();
         }
-        
-        // --- PWA Service Worker Registration ---
+
+        // PWA Service Worker Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // CAMINHO CORRIGIDO
                 navigator.serviceWorker.register('/Controle-de-financas-JN/sw.js').then(registration => {
                     console.log('ServiceWorker registado com sucesso: ', registration.scope);
                 }, err => {
@@ -1474,7 +1422,6 @@ function updateDateTime() {
 
         // Inicia o relógio apenas uma vez
         setInterval(updateDateTime, 1000);
-
     </script>
 </body>
 </html>
