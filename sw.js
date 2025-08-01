@@ -1,12 +1,12 @@
 // Define o nome do cache
 const CACHE_NAME = 'financeiro-familia-v1';
-// Lista de ficheiros a serem colocados em cache (com os caminhos corrigidos)
+// Lista de ficheiros a serem colocados em cache (com os caminhos corrigidos para o repositório)
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon-192x192.png', // Corrigido
-  '/icon-512x512.png'  // Corrigido
+  '/Controle-de-financas-JN/',
+  '/Controle-de-financas-JN/index.html',
+  '/Controle-de-financas-JN/manifest.json',
+  '/Controle-de-financas-JN/icon-192x192.png',
+  '/Controle-de-financas-JN/icon-512x512.png'
 ];
 
 // Evento de instalação: abre o cache e adiciona os ficheiros da lista
