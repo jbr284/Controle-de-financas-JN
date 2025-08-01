@@ -982,8 +982,7 @@ function updateDateTime() {
                 row.dataset.id = record.id;
 
                 const displayDay = (record.type === 'Débito' && record.scheduledDay) ? record.scheduledDay : record.day;
-                const date = new Date(currentYear, currentMonth, displayDay);
-                const formattedDate = date.toLocaleDateString('pt-BR');
+                const date =  new Date(currentYear, currentMonth, displayDay).toLocaleDateString('pt-BR');
                 row.insertCell().textContent = formattedDate;
 
                 row.insertCell().textContent = record.description;
