@@ -983,7 +983,7 @@ function updateDateTime() {
 
                 const displayDay = (record.type === 'Débito' && record.scheduledDay) ? record.scheduledDay : record.day;
                 const date = new Date(currentYear, currentMonth, displayDay);
-                const formattedDate = date.toLocaleDateString('pt-PT');
+                const formattedDate = date.toLocaleDateString('pt-BR');
                 row.insertCell().textContent = formattedDate;
 
                 row.insertCell().textContent = record.description;
