@@ -1337,9 +1337,9 @@
 
         function showReschedulePrompt(recordId) {
             const records = getRecords();
-            const recordToReschedule = records.find(record => record.id === id);
+            const recordToReschedule = records.find(record => record.id === recordId); // CORREÇÃO AQUI
             if (!recordToReschedule) {
-                showModal('Erro', 'Registo não encontrado.', [{ text: 'OK', 'primary' }]);
+                showModal('Erro', 'Registo não encontrado.', [{ text: 'OK', class: 'primary' }]); // CORREÇÃO AQUI
                 return;
             }
             const bodyContainer = document.createElement('div');
@@ -1475,4 +1475,3 @@
     </script>
 </body>
 </html>
-Analisa para mim, quero realizar um ajuste ne PWA.
