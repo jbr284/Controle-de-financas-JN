@@ -204,14 +204,43 @@
             border: 1px solid #fce4ec;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
-        .form-section h2 {
+        
+        /* --- NOVO: Estilos para formulário expansível --- */
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+        .form-header h2 {
             margin-top: 0;
             color: #e91e63;
-            border-bottom: 1px solid #f8bbd0;
-            padding-bottom: 12px;
-            margin-bottom: 25px;
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
             font-size: 1.8em;
         }
+        .form-toggle-icon {
+            font-size: 1.5em;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .form-toggle-icon.expanded {
+            transform: rotate(45deg);
+        }
+        .form-content {
+            overflow: hidden;
+            max-height: 1000px; /* Altura suficiente para o conteúdo */
+            transition: max-height 0.5s ease-in-out;
+            margin-top: 25px; /* Adiciona espaço quando aberto */
+        }
+        .form-content.collapsed {
+            max-height: 0;
+            margin-top: 0;
+        }
+        /* --- FIM: Estilos para formulário expansível --- */
+
         .form-group {
             margin-bottom: 18px;
             display: flex;
@@ -467,21 +496,23 @@
         <h1>Controle Financeiro Família Rosa</h1>
 
         <section id="login-screen" class="active">
-            <h2>Acesso ao Sistema</h2>
-            <div class="login-form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" placeholder="seu@email.com">
-            </div>
-            <div class="login-form-group">
-                <label for="password">Senha:</label>
-                <input type="password" id="password" placeholder="Mínimo 6 caracteres">
-            </div>
-            <div class="login-buttons">
-                <button id="login-button">Entrar</button>
-                <button id="register-button" class="secondary">Registar</button>
-            </div>
-            <p id="login-error"></p>
-            <p class="register-info">O registo de novas contas requer um e-mail pré-aprovado.</p>
+            <form id="login-form">
+                <h2>Acesso ao Sistema</h2>
+                <div class="login-form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="login-form-group">
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" placeholder="Mínimo 6 caracteres" required>
+                </div>
+                <div class="login-buttons">
+                    <button type="submit" id="login-button">Entrar</button>
+                    <button type="button" id="register-button" class="secondary">Registar</button>
+                </div>
+                <p id="login-error"></p>
+                <p class="register-info">O registo de novas contas requer um e-mail pré-aprovado.</p>
+            </form>
         </section>
 
         <section id="records-screen">
@@ -507,57 +538,62 @@
 
             <div class="main-content-layout">
                 <div class="form-section">
-                    <h2>Registar Nova Transação</h2>
-                    <div class="form-group">
-                        <label for="day-select">Dia do Registo:</label>
-                        <select id="day-select"></select>
+                    <div class="form-header" id="form-header">
+                        <h2>Registar Nova Transação</h2>
+                        <span class="form-toggle-icon">+</span>
                     </div>
-                    <div class="form-group">
-                        <label>Tipo de Registo:</label>
-                        <div class="radio-options">
-                            <input type="radio" id="type-revenue" name="record-type" value="Receita" checked>
-                            <label for="type-revenue">Receita</label>
-                            <input type="radio" id="type-debit" name="record-type" value="Débito">
-                            <label for="type-debit">Débito</label>
-                        </div>
-                    </div>
-                    <div id="debit-options" class="hidden">
+                    <div class="form-content collapsed" id="form-content">
                         <div class="form-group">
-                            <label for="debit-type">Opção de Débito:</label>
-                            <select id="debit-type">
-                                <option value="à vista">À vista</option>
-                                <option value="a prazo">A prazo</option>
-                                <option value="parcelado">Parcelado</option>
-                            </select>
+                            <label for="day-select">Dia do Registo:</label>
+                            <select id="day-select"></select>
                         </div>
-                        <div id="debit-aprazo-fields" class="hidden form-group">
-                            <label for="debit-due-day-aprazo">Dia do Débito:</label>
-                            <select id="debit-due-day-aprazo"></select>
-                        </div>
-                        <div id="debit-parcelado-fields" class="hidden">
-                            <div class="form-group">
-                                <label for="num-installments">Nº de Parcelas:</label>
-                                <input type="number" id="num-installments" min="1" value="1">
-                            </div>
-                            <div class="form-group">
-                                <label for="debit-due-day-parcelado">Dia do Débito (Parcela):</label>
-                                <select id="debit-due-day-parcelado"></select>
+                        <div class="form-group">
+                            <label>Tipo de Registo:</label>
+                            <div class="radio-options">
+                                <input type="radio" id="type-revenue" name="record-type" value="Receita" checked>
+                                <label for="type-revenue">Receita</label>
+                                <input type="radio" id="type-debit" name="record-type" value="Débito">
+                                <label for="type-debit">Débito</label>
                             </div>
                         </div>
+                        <div id="debit-options" class="hidden">
+                            <div class="form-group">
+                                <label for="debit-type">Opção de Débito:</label>
+                                <select id="debit-type">
+                                    <option value="à vista">À vista</option>
+                                    <option value="a prazo">A prazo</option>
+                                    <option value="parcelado">Parcelado</option>
+                                </select>
+                            </div>
+                            <div id="debit-aprazo-fields" class="hidden form-group">
+                                <label for="debit-due-day-aprazo">Dia do Débito:</label>
+                                <select id="debit-due-day-aprazo"></select>
+                            </div>
+                            <div id="debit-parcelado-fields" class="hidden">
+                                <div class="form-group">
+                                    <label for="num-installments">Nº de Parcelas:</label>
+                                    <input type="number" id="num-installments" min="1" value="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="debit-due-day-parcelado">Dia do Débito (Parcela):</label>
+                                    <select id="debit-due-day-parcelado"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descrição:</label>
+                            <input type="text" id="description" placeholder="Ex: Salário, Aluguer">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categoria:</label>
+                            <input type="text" id="category" placeholder="Ex: Casa, Alimentação">
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Valor Monetário:</label>
+                            <input type="number" id="amount" step="0.01" min="0">
+                        </div>
+                        <button class="add-record" id="add-record-button">Adicionar Registo</button>
                     </div>
-                    <div class="form-group">
-                        <label for="description">Descrição:</label>
-                        <input type="text" id="description" placeholder="Ex: Salário, Aluguer">
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Categoria:</label>
-                        <input type="text" id="category" placeholder="Ex: Casa, Alimentação">
-                    </div>
-                    <div class="form-group">
-                        <label for="amount">Valor Monetário:</label>
-                        <input type="number" id="amount" step="0.01" min="0">
-                    </div>
-                    <button class="add-record" id="add-record-button">Adicionar Registo</button>
                 </div>
                 
                 <div class="summary-card">
@@ -660,10 +696,10 @@
 
         // --- Referências aos elementos do DOM ---
         const loginScreen = document.getElementById('login-screen');
+        const loginForm = document.getElementById('login-form');
         const recordsScreen = document.getElementById('records-screen');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
-        const loginButton = document.getElementById('login-button');
         const registerButton = document.getElementById('register-button');
         const logoutButton = document.getElementById('logout-button');
         const saveDataButton = document.getElementById('save-data-button');
@@ -695,6 +731,9 @@
         const modalTitle = document.getElementById('modal-title');
         const modalBody = document.getElementById('modal-body');
         const modalFooter = document.getElementById('modal-footer');
+        const formHeader = document.getElementById('form-header');
+        const formContent = document.getElementById('form-content');
+        const formToggleIcon = document.querySelector('.form-toggle-icon');
 
         let currentMonth;
         let currentYear;
@@ -1300,7 +1339,7 @@
             const records = getRecords();
             const recordToReschedule = records.find(record => record.id === id);
             if (!recordToReschedule) {
-                showModal('Erro', 'Registo não encontrado.', [{ text: 'OK', class: 'primary' }]);
+                showModal('Erro', 'Registo não encontrado.', [{ text: 'OK', 'primary' }]);
                 return;
             }
             const bodyContainer = document.createElement('div');
@@ -1370,13 +1409,21 @@
         }
 
         // --- Event Listeners ---
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleLogin();
+        });
         registerButton.addEventListener('click', handleRegister);
-        loginButton.addEventListener('click', handleLogin);
         logoutButton.addEventListener('click', handleLogout);
         saveDataButton.addEventListener('click', saveDataToFirestore);
         loadDataButton.addEventListener('click', loadDataFromFirestore);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
+        });
+        formHeader.addEventListener('click', () => {
+            formContent.classList.toggle('collapsed');
+            formToggleIcon.classList.toggle('expanded');
+            formToggleIcon.textContent = formContent.classList.contains('collapsed') ? '✚' : '✖';
         });
         typeRevenueRadio.addEventListener('change', () => {
             debitOptionsDiv.classList.add('hidden');
@@ -1407,6 +1454,9 @@
             populateMonthYearSelectors();
             renderRecords();
             clearForm();
+            formContent.classList.add('collapsed');
+            formToggleIcon.textContent = '✚';
+            formToggleIcon.classList.remove('expanded');
         }
 
         // PWA Service Worker Registration
@@ -1425,3 +1475,4 @@
     </script>
 </body>
 </html>
+Analisa para mim, quero realizar um ajuste ne PWA.
